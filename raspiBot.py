@@ -107,6 +107,12 @@ class RaspiBot(GtalkRobot):
     #This executes the shell command argument after 'shell' or 'bash'
     def command_003_shell(self, user, message, args):
         '''(shell|bash)( +(.*))?$(?i)'''
+
+        jid = user.getStripped()
+        if jid not in BOT_ADMIN:
+            self.replyMessage(user, "You are not admin !", time.localtime())
+            return
+
         cmd = args[1]
         p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         output = ""
