@@ -122,6 +122,11 @@ class RaspiBot(GtalkRobot):
         retval = p.wait()
         self.replyMessage(user, output +" at: "+time.strftime("%Y-%m-%d %a %H:%M:%S", time.localtime()))
 
+    #This replies with the same words
+    def command_003_say(self, user, message, args):
+        '''(say)( +(.*))?$(?i)'''
+        self.replyMessage(user, ''.join(args[1]))
+
     #This method is the default response
     def command_100_default(self, user, message, args):
         '''.*?(?s)(?m)'''
