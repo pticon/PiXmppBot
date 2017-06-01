@@ -21,7 +21,7 @@ sudo easy_install -U distribute
 sudo pip install RPi.GPIO pydns
 sudo pip install --pre xmpppy
 ```
-**3bis** Abug could be present in the xmpppy modules
+**3bis.** A bug could be present in the xmpppy modules
 ```
 --- xmpp/transports.py.orig	2010-04-06 21:05:04.000000000 +0800
 +++ xmpp/transports.py	2010-04-06 21:05:20.000000000 +0800
