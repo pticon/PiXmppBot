@@ -25,6 +25,7 @@
 #
 import time
 import subprocess
+import inspect
 import RPi.GPIO as GPIO
 from PyGtalkRobot import GtalkRobot
 
@@ -126,6 +127,20 @@ class RaspiBot(GtalkRobot):
     def command_003_say(self, user, message, args):
         '''(say)( +(.*))?$(?i)'''
         self.replyMessage(user, ''.join(args[1]))
+
+    #This lists the available commands
+    def command_003_help(self, user, message, args):
+        '''(help|h)( +(.*))?$(?i)'''
+        string = ''
+        for (name, value) in inspect.getmembers(self):
+            if inspect.ismethod(value) and name.startswith(self.command_prefix):
+                try:
+                    tmp = value.__doc__.split('(')[1].split(')')[0]
+                    if tmp != '?s':
+                        string += tmp + '\n'
+                except:
+                    pass
+        self.replyMessage(user, string)
 
     #This method is the default response
     def command_100_default(self, user, message, args):
