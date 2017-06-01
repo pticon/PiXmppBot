@@ -30,13 +30,13 @@ from PyGtalkRobot import GtalkRobot
 
 BOT_GTALK_USER = 'bot_username@gmail.com'
 BOT_GTALK_PASS = 'password'
-BOT_ADMIN = 'admin_username@gmail.com'
+BOT_ADMIN = ('admin_username@gmail.com', 'admin2_username@gmail.com')
 
 GPIO.setmode(GPIO.BOARD) # or GPIO.setmode(GPIO.BCM)
 ############################################################################################################################
 
 class RaspiBot(GtalkRobot):
-    
+
     #Regular Expression Pattern Tips:
     # I or IGNORECASE <=> (?i)      case insensitive matching
     # L or LOCALE <=> (?L)          make \w, \W, \b, \B dependent on the current locale
@@ -44,11 +44,11 @@ class RaspiBot(GtalkRobot):
     # S or DOTALL <=> (?s)          '.' matches ALL chars, including newline
     # U or UNICODE <=> (?u)         Make \w, \W, \b, and \B dependent on the Unicode character properties database.
     # X or VERBOSE <=> (?x)         Ignores whitespace outside character sets
-    
+
     #"command_" is the command prefix, "001" is the priviledge num, "setState" is the method name.
     #This method is used to change the state and status text of the bot.
     def command_001_setState(self, user, message, args):
-        #the __doc__ of the function is the Regular Expression of this command, if matched, this command method will be called. 
+        #the __doc__ of the function is the Regular Expression of this command, if matched, this command method will be called.
         #The parameter "args" is a list, which will hold the matched string in parenthesis of Regular Expression.
         '''(available|online|busy|dnd|away|idle|out|xa)( +(.*))?$(?i)'''
         show = args[0]
@@ -56,7 +56,7 @@ class RaspiBot(GtalkRobot):
         jid = user.getStripped()
 
         # Verify if the user is the Administrator of this bot
-        if jid == BOT_ADMIN:
+        if jid in BOT_ADMIN:
             print jid, " ---> ",bot.getResources(jid), bot.getShow(jid), bot.getStatus(jid)
             self.setState(show, status)
             self.replyMessage(user, "State settings changed！")
@@ -103,7 +103,7 @@ class RaspiBot(GtalkRobot):
         GPIO.setup(int(pin_num), GPIO.IN)
         pin_value = GPIO.input(int(pin_num))
         self.replyMessage(user, "\nPin read: "+ pin_num + " value: " + str(pin_value) + " at: "+time.strftime("%Y-%m-%d %a %H:%M:%S", time.localtime()))
-    
+
     #This executes the shell command argument after 'shell' or 'bash'
     def command_003_shell(self, user, message, args):
         '''(shell|bash)( +(.*))?$(?i)'''
@@ -115,7 +115,7 @@ class RaspiBot(GtalkRobot):
             print line,
         retval = p.wait()
         self.replyMessage(user, output +" at: "+time.strftime("%Y-%m-%d %a %H:%M:%S", time.localtime()))
-    
+
     #This method is the default response
     def command_100_default(self, user, message, args):
         '''.*?(?s)(?m)'''
