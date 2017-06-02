@@ -28,10 +28,16 @@ import subprocess
 import inspect
 import RPi.GPIO as GPIO
 from PyGtalkRobot import GtalkRobot
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 BOT_GTALK_USER = 'bot_username@gmail.com'
 BOT_GTALK_PASS = 'password'
 BOT_ADMIN = ('admin_username@gmail.com', 'admin2_username@gmail.com')
+
+SMTP_SERVER='smtp.gmail.com:587'
 
 GPIO.setmode(GPIO.BOARD) # or GPIO.setmode(GPIO.BCM)
 ############################################################################################################################
@@ -147,6 +153,26 @@ class RaspiBot(GtalkRobot):
             return
 
         self.replyMessage(user, ''.join(args[1]))
+
+    def command_003_mail(self, user, message, args):
+        '''(email|mail)\s+(.*?@.+?)\s+(.*?),\s*(.*?)?$(?i)'''
+        if len(args) < 3:
+            self.replyMessage(user, "usage: mail <mailto> <subject>, <body>")
+            return
+
+        msg = MIMEMultipart()
+        msg['To'] = args[1]
+        msg['Subject'] = args[2]
+        msg['From'] = BOT_GTALK_USER
+        msg.attach(MIMEText(args[3]))
+
+        mailer = smtplib.SMTP(SMTP_SERVER)
+        mailer.starttls()
+        mailer.login(BOT_GTALK_USER, BOT_GTALK_PASS)
+        mailer.sendmail(BOT_GTALK_USER, args[1], msg.as_string())
+        mailer.quit()
+
+        self.replyMessage(user, "\nEmail sent to "+ args[1] +" at: "+time.strftime("%Y-%m-%d %a %H:%M:%S", time.localtime()))
 
     #This lists the available commands
     def command_003_help(self, user, message, args):
