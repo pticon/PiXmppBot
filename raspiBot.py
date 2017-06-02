@@ -65,6 +65,10 @@ class RaspiBot(GtalkRobot):
     #This method turns on the specified GPIO pin
     def command_003_pinOn(self, user, message, args):
         '''(pinon|pon|on|high)( +(.*))?$(?i)'''
+        if len(args) < 2 or type(args[1]) is not str:
+            self.replyMessage(user, "usage: pinon <pin number>")
+            return
+
         print "GPIO pin on\n"
         pin_num = args[1]
         GPIO.setup(int(pin_num), GPIO.OUT)
@@ -74,6 +78,10 @@ class RaspiBot(GtalkRobot):
     #This method turns off the specified GPIO pin
     def command_003_pinOff(self, user, message, args):
         '''(pinoff|poff|off|low)( +(.*))?$(?i)'''
+        if len(args) < 2 or type(args[1]) is not str:
+            self.replyMessage(user, "usage: pinoff <pin number>")
+            return
+
         print "GPIO pin off\n"
         pin_num = args[1]
         GPIO.setup(int(pin_num), GPIO.OUT)
@@ -83,6 +91,10 @@ class RaspiBot(GtalkRobot):
     #This method writes to the specified GPIO pin
     def command_003_write(self, user, message, args):
         '''(write|w)( +(.*))?$(?i)'''
+        if len(args) < 2 or type(args[1]) is not str:
+            self.replyMessage(user, "usage: write <pin number>")
+            return
+
         print "GPIO pin write\n"
         arg_str = args[1]
         aargs = arg_str.split()
@@ -99,6 +111,10 @@ class RaspiBot(GtalkRobot):
     #This method reads the value of the specified GPIO pin
     def command_003_read(self, user, message, args):
         '''(read|r)( +(.*))?$(?i)'''
+        if len(args) < 2 or type(args[1]) is not str:
+            self.replyMessage(user, "usage: read <pin number>")
+            return
+
         print "GPIO pin read\n"
         pin_num = args[1]
         GPIO.setup(int(pin_num), GPIO.IN)
@@ -126,6 +142,10 @@ class RaspiBot(GtalkRobot):
     #This replies with the same words
     def command_003_say(self, user, message, args):
         '''(say)( +(.*))?$(?i)'''
+        if len(args) < 2 or type(args[1]) is not str:
+            self.replyMessage(user, "usage: say <words>")
+            return
+
         self.replyMessage(user, ''.join(args[1]))
 
     #This lists the available commands
