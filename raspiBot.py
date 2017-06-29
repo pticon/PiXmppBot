@@ -26,7 +26,12 @@
 import time
 import subprocess
 import inspect
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except:
+    GPIO_ENABLE = False
+else:
+    GPIO_ENABLE = True
 from PyGtalkRobot import GtalkRobot
 import smtplib
 from email.mime.text import MIMEText
@@ -39,7 +44,8 @@ BOT_ADMIN = ('admin_username@gmail.com', 'admin2_username@gmail.com')
 
 SMTP_SERVER='smtp.gmail.com:587'
 
-GPIO.setmode(GPIO.BOARD) # or GPIO.setmode(GPIO.BCM)
+if GPIO_ENABLE:
+    GPIO.setmode(GPIO.BOARD) # or GPIO.setmode(GPIO.BCM)
 ############################################################################################################################
 
 class RaspiBot(GtalkRobot):
@@ -71,6 +77,10 @@ class RaspiBot(GtalkRobot):
     #This method turns on the specified GPIO pin
     def command_003_pinOn(self, user, message, args):
         '''(pinon|pon|on|high)( +(.*))?$(?i)'''
+        if not GPIO_ENABLE:
+            self.replyMessage(user, "GPIO is not enabled")
+            return
+
         if len(args) < 2 or type(args[1]) is not str:
             self.replyMessage(user, "usage: pinon <pin number>")
             return
@@ -84,6 +94,10 @@ class RaspiBot(GtalkRobot):
     #This method turns off the specified GPIO pin
     def command_003_pinOff(self, user, message, args):
         '''(pinoff|poff|off|low)( +(.*))?$(?i)'''
+        if not GPIO_ENABLE:
+            self.replyMessage(user, "GPIO is not enabled")
+            return
+
         if len(args) < 2 or type(args[1]) is not str:
             self.replyMessage(user, "usage: pinoff <pin number>")
             return
@@ -97,6 +111,10 @@ class RaspiBot(GtalkRobot):
     #This method writes to the specified GPIO pin
     def command_003_write(self, user, message, args):
         '''(write|w)( +(.*))?$(?i)'''
+        if not GPIO_ENABLE:
+            self.replyMessage(user, "GPIO is not enabled")
+            return
+
         if len(args) < 2 or type(args[1]) is not str:
             self.replyMessage(user, "usage: write <pin number>")
             return
@@ -117,6 +135,10 @@ class RaspiBot(GtalkRobot):
     #This method reads the value of the specified GPIO pin
     def command_003_read(self, user, message, args):
         '''(read|r)( +(.*))?$(?i)'''
+        if not GPIO_ENABLE:
+            self.replyMessage(user, "GPIO is not enabled")
+            return
+
         if len(args) < 2 or type(args[1]) is not str:
             self.replyMessage(user, "usage: read <pin number>")
             return
