@@ -37,6 +37,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from Translate import Translate
+
 
 BOT_GTALK_USER = 'bot_username@gmail.com'
 BOT_GTALK_PASS = 'password'
@@ -195,6 +197,11 @@ class RaspiBot(GtalkRobot):
         mailer.quit()
 
         self.replyMessage(user, "\nEmail sent to "+ args[1] +" at: "+time.strftime("%Y-%m-%d %a %H:%M:%S", time.localtime()))
+
+    def command_003_translate(self, user, message, args):
+        '''(tr|translate)( +(.*))?$(?i)'''
+        Tr = Translate()
+        self.replyMessage(user, Tr.translate(''.join(args[1])))
 
     #This lists the available commands
     def command_003_help(self, user, message, args):
