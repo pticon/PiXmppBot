@@ -153,7 +153,7 @@ class RaspiBot(GtalkRobot):
 
     #This executes the shell command argument after 'shell' or 'bash'
     def command_003_shell(self, user, message, args):
-        '''(shell|bash)( +(.*))?$(?i)'''
+        '''(sh|shell|bash)( +(.*))?$(?i)'''
 
         jid = user.getStripped()
         if jid not in BOT_ADMIN:
