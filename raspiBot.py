@@ -201,7 +201,17 @@ class RaspiBot(GtalkRobot):
     def command_003_translate(self, user, message, args):
         '''(tr|translate)( +(.*))?$(?i)'''
         Tr = Translate()
-        self.replyMessage(user, Tr.translate(''.join(args[1])))
+        froml = "auto"
+        tol = "auto"
+        txt = ''.join(args[1])
+
+        words = args[1].split()
+
+        if len( words[0].split('2') ) == 2:
+            (froml, tol) = Tr.parse_lang(words[0])
+            txt = ' '.join(words[1:])
+
+        self.replyMessage(user, Tr.translate(txt=txt, froml=froml, tol=tol))
 
     #This lists the available commands
     def command_003_help(self, user, message, args):

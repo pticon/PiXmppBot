@@ -37,6 +37,7 @@ class Translate:
         self.__user_agent = {"User-Agent" : "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0"}
         self.__rexpr = r'class="t0">(.*?)<'
         self.__html_parser = HTMLParser.HTMLParser()
+        self.__lang = ('en', 'fr', 'nl', 'de', 'es')
 
     def set_user_agent(self, ua):
         """Replace the User Agent"""
@@ -57,3 +58,16 @@ class Translate:
             return ""
 
         return self.__html_parser.unescape(re_result[0])
+
+    def parse_lang(self, code):
+        """Parse the langage code and return a tuple (from, to)"""
+
+        (froml, tol) = code.split("2")
+
+        if not froml in self.__lang:
+            froml = 'auto'
+
+        if not tol in self.__lang:
+            tol = 'auto'
+
+        return (froml, tol)
